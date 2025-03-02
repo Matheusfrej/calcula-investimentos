@@ -1,5 +1,15 @@
 import json
 
+COLORS = {
+    "green": "\033[92m",
+    "blue": "\033[94m",
+    "yellow": "\033[93m",
+    "cyan": "\033[96m",
+    "magenta": "\033[95m",
+    "red": "\033[91m",
+    "reset": "\033[0m"
+}
+
 # Classe que representa cada nó (objeto de investimento) na árvore
 class Node:
     def __init__(self, nome, recomendado=0, investido=0):
@@ -36,7 +46,7 @@ class Node:
 
     def display(self, indent=0):
         espaco = " " * indent
-        print(f"{espaco}{self.nome}: Investido R$ {self.investido:.2f} (Recomendado: R$ {self.recomendado:.2f})")
+        print(f"{espaco}{COLORS['green']}{self.nome}{COLORS['reset']}: Investido {COLORS['blue']}R$ {self.investido:.2f}{COLORS['reset']} (Recomendado: {COLORS['yellow']}R$ {self.recomendado:.2f}{COLORS['reset']})")
         for child in self.children:
             child.display(indent + 2)
 
@@ -73,7 +83,7 @@ def build_full_tree(total, config):
         if current_item == items_length and items_length > 1:
             weights[key] = 1 - total_weight
         else:
-            peso = float(input(f"Digite a porcentagem (peso) para {key} (padrão: {conf['weight']}): ") or conf["weight"])
+            peso = float(input(f"Digite a porcentagem (peso) para {COLORS['cyan']}{key}{COLORS['reset']} (use tecla 'ENTER' para padrão: {conf['weight']}): ") or conf["weight"])
             weights[key] = peso
             total_weight += peso
             current_item += 1
@@ -101,18 +111,37 @@ def calcular_investimento(I, config):
     # Constrói a árvore de investimentos a partir da configuração e dos pesos informados
     root = build_full_tree(I, config)
     
-    print("\nDistribuição Inicial:")
+    print(f"\n{COLORS['magenta']}Distribuição Inicial:{COLORS['reset']}")
     root.display()
     
     folhas = coletar_folhas(root)
-    for folha in folhas:
-        valor = float(input(f"\nQuanto você realmente investiu em {folha.nome} (Recomendado: R$ {folha.recomendado:.2f})? ") or 0)
-        folha.investido = valor
-        folha.update_upwards()  # Propaga a atualização para os nós pais e ajusta os orçamentos dos irmãos
-        print("\nDistribuição Atualizada:")
-        root.display()
+    index = 0
+    while index < len(folhas):
+        folha = folhas[index]
+        print(f"\n{COLORS['blue']}Digite \"VOLTAR\" para corrigir valor anterior{COLORS['reset']}") if (index > 0) else print()
+        entrada = input(f"Quanto você realmente investiu em {COLORS['cyan']}{folha.nome}{COLORS['reset']} (Recomendado: {COLORS['yellow']}R$ {folha.recomendado:.2f}{COLORS['reset']})?: ")
+        
+        if entrada.upper() == "VOLTAR" and index > 0:
+            print(f'\n{COLORS["magenta"]} Voltando... {COLORS["reset"]}')
+            index -= 1
+            continue
+        
+        try:
+            valor = float(entrada)
+            folha.investido = valor
+            folha.update_upwards()
+            print(f"\n{COLORS['magenta']}Distribuição Atualizada:{COLORS['reset']}")
+            root.display()
+            index += 1
+        except ValueError:
+            error_output = "\nEntrada inválida! Digite um valor numérico."
+            if index == 1:
+                error_output = error_output.replace('.', ' ou \'VOLTAR\' para corrigir a entrada anterior.') 
+            print(f"{COLORS['red']}{error_output}{COLORS['reset']}")
     
-    print(f"\nDistribuição finalizada. Investimento Total Investido: R$ {root.investido:.2f}")
+    print(f"\n{COLORS['green']}Distribuição finalizada.{COLORS['reset']}")
+    print(f"Valor Planejado: {COLORS['blue']}R$ {root.recomendado:.2f}{COLORS['reset']}.")
+    print(f"Valor Investido: {COLORS['blue']}R$ {root.investido:.2f}{COLORS['reset']}.")
 
 
 if __name__ == "__main__":
