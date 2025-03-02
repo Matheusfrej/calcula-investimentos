@@ -12,7 +12,7 @@ COLORS = {
 
 # Classe que representa cada nó (objeto de investimento) na árvore
 class Node:
-    def __init__(self, nome, recomendado=0, investido=0):
+    def __init__(self, nome, recomendado=0, investido=0) -> None:
         self.nome = nome
         self.orig_recomendado = recomendado  # Valor recomendado original (fixo)
         self.recomendado = recomendado       # Valor recomendado atual (ajustável)
@@ -20,18 +20,18 @@ class Node:
         self.children = []
         self.parent = None
 
-    def add_child(self, child):
+    def add_child(self, child) -> None:
         child.parent = self
         self.children.append(child)
 
-    def update_upwards(self):
+    def update_upwards(self) -> None:
         """Atualiza recursivamente o valor investido e redistribui os orçamentos dos nós pais."""
         if self.parent:
             self.parent.investido = sum(child.investido for child in self.parent.children)
             self.parent.update_children_recommended()
             self.parent.update_upwards()
 
-    def update_children_recommended(self):
+    def update_children_recommended(self) -> None:
         """Redistribui o orçamento recomendado entre os filhos (apenas os que ainda não foram investidos),
         de forma que a soma dos recomendados seja igual ao orçamento disponível neste nó.
         Propaga essa atualização recursivamente para os descendentes."""
@@ -44,14 +44,14 @@ class Node:
                 child.recomendado = (child.orig_recomendado / total_orig * max(restante, 0)) if total_orig > 0 else 0
             child.update_children_recommended()
 
-    def display(self, indent=0):
+    def display(self, indent=0) -> None:
         espaco = " " * indent
         print(f"{espaco}{COLORS['green']}{self.nome}{COLORS['reset']}: Investido {COLORS['blue']}R$ {self.investido:.2f}{COLORS['reset']} (Recomendado: {COLORS['yellow']}R$ {self.recomendado:.2f}{COLORS['reset']})")
         for child in self.children:
             child.display(indent + 2)
 
 
-def build_tree_from_config(name, conf, total_value):
+def build_tree_from_config(name, conf, total_value) -> Node:
     """
     Constrói recursivamente um nó a partir da configuração.
     Distribui o orçamento (total_value) entre os filhos usando os pesos definidos.
@@ -67,7 +67,7 @@ def build_tree_from_config(name, conf, total_value):
     return node
 
 
-def build_full_tree(total, config):
+def build_full_tree(total, config) -> Node:
     """
     Constrói a árvore completa a partir do dicionário de configuração.
     Para os nós diretos (filhos do "Investimento Total"), o usuário informa o peso para "Renda Variável"
@@ -95,9 +95,9 @@ def build_full_tree(total, config):
     return root
 
 
-def coletar_folhas(node):
+def coletar_folhas(node) -> list[Node]:
     folhas = []
-    def _coletar(n):
+    def _coletar(n) -> None:
         if not n.children:
             folhas.append(n)
         else:
@@ -107,7 +107,7 @@ def coletar_folhas(node):
     return folhas
 
 
-def calcular_investimento(I, config):
+def calcular_investimento(I, config) -> None:
     # Constrói a árvore de investimentos a partir da configuração e dos pesos informados
     root = build_full_tree(I, config)
     
