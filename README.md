@@ -61,10 +61,10 @@ Nesse exemplo:
 
 Para executar o programa, siga os passos abaixo:
 
-1. **Baixe o arquivo ZIP** que contém o programa.
+1. **Baixe o arquivo ZIP** que contém o programa presente na sessão "Releases" do GitHub. O zip vai ter o nome `"CalculaInvestimentos_{versao}.zip"`.
 2. **Extraia os arquivos** para uma pasta de sua escolha.
-3. **Certifique-se de que o arquivo `investment_config.json` está na mesma pasta que o executável (`CalculaInvestimentos.exe`)**.
-4. **Dê um duplo clique no arquivo `CalculaInvestimentos.exe`** para iniciar o programa.
+3. **Certifique-se de que o arquivo `investment_config.json` está na mesma pasta que o executável (`CalculaInvestimentos_{versao}.exe`)**.
+4. **Dê um duplo clique no arquivo executável** para iniciar o programa.
 
 > **Importante:** O programa será executado no terminal e pedirá que você insira os valores conforme necessário.
 
@@ -95,26 +95,25 @@ O programa solicitará:
 
 ---
 
-### 4. Criar o Executável `.exe` (Para Desenvolvedores)
+### 4. Gerar uma nova versão (Para Desenvolvedores)
 Caso queira gerar um novo executável para distribuição, siga os passos abaixo.
 
-#### 4.1 Instalar o PyInstaller
-Se ainda não tiver o PyInstaller instalado, execute:
-```sh
-pip install pyinstaller
-```
+#### 4.1 Não tenha modificações pendentes
+Só gere uma nova versão do programa se você tiver dado commit de todo código modificado.
 
-#### 4.2 Gerar o Executável
-Navegue até a pasta onde está o `main.py` e execute o seguinte comando:
+#### 4.2 Rode a pipeline
+Navegue até a pasta onde está o `build.py` e execute o seguinte comando:
 ```sh
-pyinstaller --onefile --name=CalculaInvestimentos main.py
+python build.py [major|minor|patch|test]
 ```
 
 ##### Parâmetros explicados:
-- `--onefile`: Cria um único arquivo `.exe`.
-- `--name=CalculaInvestimentos`: Define o nome do executável.
+- Utilize o argumento `test` quando quiser testar uma build nova sem liberar uma nova versão.
+- Utilize o `patch` para aumentar apenas o último número, exemplo: **v1.0..4 -> v1.0.5**. É uma modificação apenas para correções e não modifica funcionalidades.
+- Utilize o `minor` para uma versão nova que modifique ou adicione funcionalidades ao programa. Exemplo: **v1.0.4 -> v1.1.0.**
+- Utilize `major` para alterações que fazem grandes alterações no funcionamento do programa. Exemplo: **v1.1.4 -> v2.0.0.**
 
-O executável gerado estará na pasta `dist/`, com o nome `CalculaInvestimentos.exe`. Coloque o executável no mesmo diretório de `investment_config.json` para garantir que ele funcione corretamente.
+O executável gerado estará na pasta `release/`, com o nome `CalculaInvestimentos_{versao}.exe`. Coloque o arquivo de configuração `investment_config.json` na mesma pasta para garantir que ele funcione corretamente.
 
 ---
 
