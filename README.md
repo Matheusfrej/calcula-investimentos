@@ -1,6 +1,6 @@
-# Investimento Automático
+# Calcula Investimentos
 
-Este programa ajuda a distribuir automaticamente um montante de investimento entre diferentes classes de ativos com base em um arquivo de configuração JSON. O usuário pode informar quanto realmente investiu em cada ativo, e o programa ajusta a distribuição dos valores recomendados para manter o total investido dentro do orçamento.
+Este programa ajuda a distribuir automaticamente um montante de investimento entre diferentes classes de ativos com base em um arquivo de configuração [JSON](https://pt.wikipedia.org/wiki/JSON). O usuário pode informar quanto realmente investiu em cada ativo, e o programa ajusta a distribuição dos valores recomendados para manter o total investido dentro do orçamento.
 
 ## Como Usar
 
@@ -8,7 +8,7 @@ Este programa ajuda a distribuir automaticamente um montante de investimento ent
 
 Antes de executar o programa, você deve criar um arquivo JSON contendo a estrutura de investimentos.
 
-Crie um arquivo chamado `investment_config.json` no mesmo diretório do programa e preencha com a estrutura desejada. Abaixo está um exemplo de configuração genérica:
+Crie um arquivo chamado `investment_config.json` no mesmo diretório do programa e preencha com a estrutura desejada. O arquivo precisa ter esse nome. Abaixo está um exemplo de configuração genérica:
 
 ```json
 {
@@ -48,51 +48,61 @@ Crie um arquivo chamado `investment_config.json` no mesmo diretório do programa
 }
 ```
 
-### 2. Executar o Programa
+### 2. Executar o Programa `.exe`
+Se você baixou a pasta do programa, o executável `.exe` já está pronto para uso. Para rodá-lo:
 
-1. Certifique-se de que você tem o Python instalado (versão 3.6 ou superior).
-2. No terminal, navegue até a pasta onde está o arquivo `investment_config.json` e o script Python.
-3. Execute o script com o comando:
-   
-   ```sh
-   python nome_do_script.py
-   ```
+1. Abra a pasta onde baixou o programa.
+2. Certifique-se de que o arquivo `investment_config.json` está na mesma pasta que o executável.
+3. Dê um duplo clique no arquivo `CalculaInvestimentos.exe` para iniciar o programa.
 
-4. O programa solicitará:
-   - O valor total do investimento.
-   - O peso inicial para os campos do JSON mais externos (ex: "Renda Variável" e "Renda Fixa").
-   - Os valores investidos para cada ativo.
+> **Importante:** O programa será executado no terminal e pedirá que você insira os valores conforme necessário.
 
-5. O programa exibirá a distribuição atualizada após cada entrada.
+---
 
-### 3. Exemplo de Uso
+### 2. Executar com Python (Desenvolvedores ou Usuários Avançados)
 
-#### Entrada do Usuário:
+Se você tem o Python instalado, pode rodar o programa diretamente. Certifique-se de que tem os arquivos `main.py` e `investment_config.json` na mesma pasta.
+
+#### Comando para rodar o programa:
 ```sh
-Digite o valor do investimento: R$ 10000
-Digite a porcentagem (peso) para Renda Variável (padrão: 0.4): 0.5
-Quanto você realmente investiu em EMPRESA1 (Recomendado: R$ 1250.00)? 1300
-Quanto você realmente investiu em EMPRESA2 (Recomendado: R$ 1200.00)? 1100
-...
+python main.py
 ```
 
-#### Saída do Programa:
+O programa solicitará:
+- O valor total do investimento.
+- O peso inicial para os campos do JSON mais externos (ex: "Renda Variável" e "Renda Fixa").
+- Os valores investidos para cada ativo.
+
+---
+
+### 3. Criar o Executável `.exe` (Para Desenvolvedores)
+Caso queira gerar um novo executável para distribuição, siga os passos abaixo.
+
+#### 3.1 Instalar o PyInstaller
+Se ainda não tiver o PyInstaller instalado, execute:
+```sh
+pip install pyinstaller
 ```
-Distribuição Atualizada:
-Investimento Total: Investido R$ 2400.00 (Recomendado: R$ 10000.00)
-  Renda Variável: Investido R$ 2400.00 (Recomendado: R$ 5000.00)
-    Ações: Investido R$ 2400.00 (Recomendado: R$ 2500.00)
-      EMPRESA1: Investido R$ 1300.00 (Recomendado: R$ 1250.00)
-      EMPRESA2: Investido R$ 1100.00 (Recomendado: R$ 1200.00)
-...
+
+#### 3.2 Gerar o Executável
+Navegue até a pasta onde está o `main.py` e execute o seguinte comando:
+```sh
+pyinstaller --onefile --name=CalculaInvestimentos main.py
 ```
+
+##### Parâmetros explicados:
+- `--onefile`: Cria um único arquivo `.exe`.
+- `--name=CalculaInvestimentos`: Define o nome do executável.
+
+O executável gerado estará na pasta `dist/`, com o nome `CalculaInvestimentos.exe`. Coloque o executável no mesmo diretório de `investment_config.json` para garantir que ele funcione corretamente.
+
+---
 
 ### 4. Personalização
-
 - Para adicionar novos ativos, edite o arquivo `investment_config.json`.
 - Altere os pesos para ajustar a distribuição recomendada.
 
 ---
 
-Este programa facilita a gestão de investimentos, ajustando automaticamente os valores conforme os aportes realizados pelo usuário.
+Este programa facilita a gestão de investimentos, ajustando automaticamente os valores conforme os aportes realizados pelo usuário. Se tiver dúvidas, consulte o código ou entre em contato! 🚀
 
