@@ -6,9 +6,11 @@ Este programa ajuda a distribuir automaticamente um montante de investimento ent
 
 ### 1. Criar o Arquivo de Configuração (JSON)
 
-Antes de executar o programa, você deve criar um arquivo JSON contendo a estrutura de investimentos.
+Antes de executar o programa, você deve criar um arquivo JSON contendo a estrutura de investimentos. 
 
-Crie um arquivo chamado `investment_config.json` no mesmo diretório do programa e preencha com a estrutura desejada. O arquivo precisa ter esse nome. Dentro do arquivo JSON, cada objeto deve ter um campo `weight`, que significa a proporção desse objeto, e pode ter um campo `children`. Abaixo está um exemplo de configuração genérica:
+O arquivo deve ser nomeado **`investment_config.json`** e estar na mesma pasta do programa. 
+
+#### Exemplo de configuração JSON:
 
 ```json
 {
@@ -48,27 +50,43 @@ Crie um arquivo chamado `investment_config.json` no mesmo diretório do programa
 }
 ```
 
-No exemplo acima, **40%** do orçamento será investido em Renda Variável, enquanto **60%** será investido em Renda Fixa. Desses **40%** da Renda Variável, **50%** será em Ações, **30%** em FIIs e **20%** em ETFs. Das Ações, por exemplo, cada ação tem `weight` = 1, então em cada uma será investido **50%** do orçamento total para Ações. E assim por diante.
+Nesse exemplo:
+- **40%** do orçamento será investido em Renda Variável, e **60%** em Renda Fixa.
+- Dentro da Renda Variável, **50%** será em Ações, **30%** em FIIs e **20%** em ETFs.
+- As Ações serão divididas igualmente entre "EMPRESA1" e "EMPRESA2".
 
-### 2. Executar o Programa `.exe`
-Se você baixou a pasta do programa, o executável `.exe` já está pronto para uso. Para rodá-lo:
+---
 
-1. Abra a pasta onde baixou o programa.
-2. Certifique-se de que o arquivo `investment_config.json` está na mesma pasta que o executável.
-3. Dê um duplo clique no arquivo `CalculaInvestimentos.exe` para iniciar o programa.
+### 2. Baixar e Extrair o Programa
+
+Para executar o programa, siga os passos abaixo:
+
+1. **Baixe o arquivo ZIP** que contém o programa.
+2. **Extraia os arquivos** para uma pasta de sua escolha.
+3. **Certifique-se de que o arquivo `investment_config.json` está na mesma pasta que o executável (`CalculaInvestimentos.exe`)**.
+4. **Dê um duplo clique no arquivo `CalculaInvestimentos.exe`** para iniciar o programa.
 
 > **Importante:** O programa será executado no terminal e pedirá que você insira os valores conforme necessário.
 
 ---
 
-### 2. Executar com Python
+### 3. Executar com Python
 
-Se você tem o Python instalado, pode rodar o programa diretamente. Certifique-se de que tem os arquivos `main.py` e `investment_config.json` na mesma pasta.
+Se você tem o Python instalado e prefere rodar o programa diretamente, siga estas instruções:
 
-#### Comando para rodar o programa:
-```sh
-python main.py
-```
+1. **Clone o repositório** ou baixe os arquivos necessários:
+   ```sh
+   git clone https://github.com/seu-repositorio/calcula-investimentos.git
+   ```
+2. **Navegue até a pasta do projeto:**
+   ```sh
+   cd calcula-investimentos
+   ```
+3. **Certifique-se de que o arquivo `investment_config.json` está presente na pasta.**
+4. **Execute o programa com o Python:**
+   ```sh
+   python main.py
+   ```
 
 O programa solicitará:
 - O valor total do investimento.
@@ -77,16 +95,16 @@ O programa solicitará:
 
 ---
 
-### 3. Criar o Executável `.exe` (Para Desenvolvedores)
+### 4. Criar o Executável `.exe` (Para Desenvolvedores)
 Caso queira gerar um novo executável para distribuição, siga os passos abaixo.
 
-#### 3.1 Instalar o PyInstaller
+#### 4.1 Instalar o PyInstaller
 Se ainda não tiver o PyInstaller instalado, execute:
 ```sh
 pip install pyinstaller
 ```
 
-#### 3.2 Gerar o Executável
+#### 4.2 Gerar o Executável
 Navegue até a pasta onde está o `main.py` e execute o seguinte comando:
 ```sh
 pyinstaller --onefile --name=CalculaInvestimentos main.py
@@ -100,11 +118,10 @@ O executável gerado estará na pasta `dist/`, com o nome `CalculaInvestimentos.
 
 ---
 
-### 4. Personalização
+### 5. Personalização
 - Para adicionar novos ativos, edite o arquivo `investment_config.json`.
 - Altere os pesos para ajustar a distribuição recomendada.
 
 ---
 
 Este programa facilita a gestão de investimentos, ajustando automaticamente os valores conforme os aportes realizados pelo usuário. Se tiver dúvidas, consulte o código ou entre em contato! 🚀
-
