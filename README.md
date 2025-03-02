@@ -8,7 +8,7 @@ Este programa ajuda a distribuir automaticamente um montante de investimento ent
 
 Antes de executar o programa, você deve criar um arquivo JSON contendo a estrutura de investimentos.
 
-Crie um arquivo chamado `investment_config.json` no mesmo diretório do programa e preencha com a estrutura desejada. O arquivo precisa ter esse nome. Abaixo está um exemplo de configuração genérica:
+Crie um arquivo chamado `investment_config.json` no mesmo diretório do programa e preencha com a estrutura desejada. O arquivo precisa ter esse nome. Dentro do arquivo JSON, cada objeto deve ter um campo `weight`, que significa a proporção desse objeto, e pode ter um campo `children`. Abaixo está um exemplo de configuração genérica:
 
 ```json
 {
@@ -48,6 +48,8 @@ Crie um arquivo chamado `investment_config.json` no mesmo diretório do programa
 }
 ```
 
+No exemplo acima, **40%** do orçamento será investido em Renda Variável, enquanto **60%** será investido em Renda Fixa. Desses **40%** da Renda Variável, **50%** será em Ações, **30%** em FIIs e **20%** em ETFs. Das Ações, por exemplo, cada ação tem `weight` = 1, então em cada uma será investido **50%** do orçamento total para Ações. E assim por diante.
+
 ### 2. Executar o Programa `.exe`
 Se você baixou a pasta do programa, o executável `.exe` já está pronto para uso. Para rodá-lo:
 
@@ -59,7 +61,7 @@ Se você baixou a pasta do programa, o executável `.exe` já está pronto para 
 
 ---
 
-### 2. Executar com Python (Desenvolvedores ou Usuários Avançados)
+### 2. Executar com Python
 
 Se você tem o Python instalado, pode rodar o programa diretamente. Certifique-se de que tem os arquivos `main.py` e `investment_config.json` na mesma pasta.
 
