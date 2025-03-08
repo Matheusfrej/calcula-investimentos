@@ -83,7 +83,7 @@ def build_full_tree(total, config) -> Node:
         if current_item == items_length and items_length > 1:
             weights[key] = 1 - total_weight
         else:
-            peso = float(input(f"Digite a porcentagem (peso) para {COLORS['cyan']}{key}{COLORS['reset']} (use tecla 'ENTER' para padrão: {conf['weight']}): ") or conf["weight"])
+            peso = float(input(f"Digite a porcentagem (peso) para {COLORS['cyan']}{key}{COLORS['reset']} (Pressione 'ENTER' para padrão: {conf['weight']}): ") or conf["weight"])
             weights[key] = peso
             total_weight += peso
             current_item += 1
@@ -116,28 +116,35 @@ def calcular_investimento(I, config) -> None:
     
     folhas = coletar_folhas(root)
     index = 0
-    while index < len(folhas):
-        folha = folhas[index]
-        print(f"\n{COLORS['blue']}Digite \"VOLTAR\" para corrigir valor anterior{COLORS['reset']}") if (index > 0) else print()
-        entrada = input(f"Quanto você realmente investiu em {COLORS['cyan']}{folha.nome}{COLORS['reset']} (Recomendado: {COLORS['yellow']}R$ {folha.recomendado:.2f}{COLORS['reset']})?: ")
-        
-        if entrada.upper() == "VOLTAR" and index > 0:
+    acabou = False
+    while not acabou:
+        while index < len(folhas):
+            folha = folhas[index]
+            print(f"\n{COLORS['blue']}Digite \"VOLTAR\" para corrigir valor anterior{COLORS['reset']}") if (index > 0) else print()
+            entrada = input(f"Quanto você realmente investiu em {COLORS['cyan']}{folha.nome}{COLORS['reset']} (Recomendado: {COLORS['yellow']}R$ {folha.recomendado:.2f}{COLORS['reset']})?: ")
+            
+            if entrada.upper() == "VOLTAR" and index > 0:
+                print(f'\n{COLORS["magenta"]} Voltando... {COLORS["reset"]}')
+                index -= 1
+                continue
+            try:
+                valor = float(entrada)
+                folha.investido = valor
+                folha.update_upwards()
+                print(f"\n{COLORS['magenta']}Distribuição Atualizada:{COLORS['reset']}")
+                root.display()
+                index += 1
+            except ValueError:
+                error_output = "\nEntrada inválida! Digite um valor numérico."
+                if index == 1:
+                    error_output = error_output.replace('.', ' ou \'VOLTAR\' para corrigir a entrada anterior.') 
+                print(f"{COLORS['red']}{error_output}{COLORS['reset']}")
+        last_chance = input(f"\n{COLORS['blue']}Digite \"VOLTAR\" para corrigir valor anterior{COLORS['reset']} ou pressione 'ENTER' para finalizar: ")
+        if last_chance.upper() == 'VOLTAR':
             print(f'\n{COLORS["magenta"]} Voltando... {COLORS["reset"]}')
             index -= 1
-            continue
-        
-        try:
-            valor = float(entrada)
-            folha.investido = valor
-            folha.update_upwards()
-            print(f"\n{COLORS['magenta']}Distribuição Atualizada:{COLORS['reset']}")
-            root.display()
-            index += 1
-        except ValueError:
-            error_output = "\nEntrada inválida! Digite um valor numérico."
-            if index == 1:
-                error_output = error_output.replace('.', ' ou \'VOLTAR\' para corrigir a entrada anterior.') 
-            print(f"{COLORS['red']}{error_output}{COLORS['reset']}")
+        else:
+            acabou = True
     
     print(f"\n{COLORS['green']}Distribuição finalizada.{COLORS['reset']}")
     print(f"Valor Planejado: {COLORS['blue']}R$ {root.recomendado:.2f}{COLORS['reset']}.")
@@ -145,10 +152,21 @@ def calcular_investimento(I, config) -> None:
 
 
 if __name__ == "__main__":
-    I = float(input("Digite o valor do investimento: R$ "))
+    try:
+        with open("investment_config.json", "r", encoding="utf-8") as f:
+            investment_config = json.load(f)
+    except FileNotFoundError:
+        input(f"{COLORS['red']}Erro: O arquivo 'investment_config.json' não foi encontrado. Pressione 'ENTER' para fechar.{COLORS['reset']}")
+        exit(1)
     
-    # Carrega a configuração de investimentos a partir de um arquivo JSON
-    with open("investment_config.json", "r", encoding="utf-8") as f:
-        investment_config = json.load(f)
-    
-    calcular_investimento(I, investment_config)
+    while True:
+        try:
+            I = float(input("Digite o valor do investimento: R$ "))
+            calcular_investimento(I, investment_config)
+        except ValueError:
+            print(f"{COLORS['red']}Valor inválido. Digite um número válido.{COLORS['reset']}")
+            continue
+        
+        repeat = input("Pressione 'ENTER' para sair ou digite qualquer tecla para calcular novamente: ")
+        if repeat == "":
+            break
